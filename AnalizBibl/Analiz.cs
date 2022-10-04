@@ -271,6 +271,7 @@ namespace AnalizBibl
                     {
                         if (IsSpecSym(sym))
                         {
+                            
                             if (!Idn.Contains(buff))
                             {
                                 Idn.Add(buff);
@@ -281,6 +282,11 @@ namespace AnalizBibl
                         }
                         else
                         {
+                            if (buff.Length >= maxleng)
+                            {
+                                noError = false;
+                                return;
+                            }
                             buff += sym;
                         }
                         break;
