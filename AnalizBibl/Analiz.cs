@@ -4,16 +4,25 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace AnalizBibl
 {
     public class Analiz
     {
         const byte maxleng = 8;
+        bool noError = true;
         string[] specsym = { ":", ";", "+", ":=", "=" };
         const string path = "Data.txt";
-        string[] States = { "Idn", "Lit", "Rzd" };
-        string State = "";
+        //static readonly string[] States = { "Idn", "Lit", "Rzd" };
+        enum States
+        {
+            None, Idn, Lit, Rzd
+        }
+
+        States state = States.None;
+
+        //string State = "";
 
         List<string> Idn = new List<string>();
         List<string> Lit = new List<string>();
@@ -21,38 +30,56 @@ namespace AnalizBibl
 
         string buff = "";
 
-        public void Scaning()
+        public bool Scaning()
         {
             if (File.Exists(path))
             {
                 StreamReader reader = new StreamReader(path);
                 string sym;
-                while ((sym = reader.Read().ToString()) != null)
-                {
+                ReadSym(reader);
+                //while ((sym = reader.Read().ToString()) != null)
+                //{
                     
-                    ReadSym(sym);
-                }
+                //    ReadSym(sym);
+                //}
+                reader.Close();
             }
+            else
+            {
+                noError = false;
+            }
+            return noError;
+        }
+        public List<string> ReturnIdent()
+        {
+            return Idn;
+        }
+        public List<string> ReturnLiter()
+        {
+            return Lit;
+        }
+        public List<string> ReturnRzd()
+        {
+            return Rzd;
         }
         private void ToState(string s)
         {
-            foreach(string spec in specsym)
+            if (IsSpecSym(s))
             {
-                if(s == spec)
-                {
-                    State = States[2];
-                    break;
-                }
+                //State = States[2];
+                state = States.Rzd;
             }
-            if(State == "")
+            else if (state == States.None)
             {
-                if(int.TryParse(s, out int n))
+                if(IsDigit(s))
                 {
-                    State = States[1];
+                    //State = States[1];
+                    state = States.Lit;
                 }
                 else
                 {
-                    State = States[0];
+                    //State = States[0];
+                    state = States.Idn;
                 }
             }
         }
@@ -79,54 +106,149 @@ namespace AnalizBibl
             return b;
         }
 
-        private void CheckLine(string line)
-        {
+        //private void CheckLine(string line)
+        //{
 
-            CheckInd(line);
-            CheckLit(line);
-            CheckRzd(line);
+        //    CheckInd(line);
+        //    CheckLit(line);
+        //    CheckRzd(line);
 
 
-        }
-        private void CheckInd(string line)
-        {
+        //}
+        //private void CheckInd(string line)
+        //{
             
-        }
-        private void CheckLit(string line)
-        {
+        //}
+        //private void CheckLit(string line)
+        //{
 
-        }
-        private void CheckRzd(string line)
-        {
+        //}
+        //private void CheckRzd(string line)
+        //{
 
+        //}
+        private bool CheckSpase(string s)
+        {
+            Regex regex = new Regex(@"\s");
+            bool b = false;
+
+            if (regex.IsMatch(s))
+            {
+                b = true;
+            }
+            return b;
+        }
+        private void ReadSym(StreamReader reader)
+        {
+            string sym = reader.Read().ToString();
+            
+            
+            if(sym != null)
+            {
+                while (CheckSpase(sym))
+                {
+                    sym = reader.Read().ToString();
+                }
+                
+
+                ToState(sym);
+                buff = sym;
+                while ((sym = reader.Read().ToString()) != null)
+                {
+                    ReadSym(sym);
+                    if(!noError)
+                    {
+                        return;
+                    }
+                }
+            }
         }
         private void ReadSym(string sym)
         {
-            string buff2 = buff;
+            if (CheckSpase(sym))
+            {
+                switch (state)
+                {
+                    case States.Lit:
+                        {
+                            Lit.Add(buff);
+                            break;
+                        }
+                    case States.Rzd:
+                        {
+                            Rzd.Add(buff);
+                            break;
+                        }
+                    case States.Idn:
+                        {
+                            Idn.Add(buff);
+                            break;
+                        }
+                }
+                state = States.None;
+                buff = "";
+                return;
+            }
+
             if(buff == "")
             {
-                if (IsSpecSym(sym))
-                {
-                    State = States[2];
-                    
-                }
-                else
-                {
-                    if (IsDigit(sym))
-                    {
-                        State = States[1];
-                    }
-                    else
-                    {
-                        State = States[0];
-                    }
-                }
+                ToState(sym);
                 buff = sym;
                 return;
             }
 
+            string buff2 = buff;
 
-
+            switch (state){
+                case States.Lit:
+                    {
+                        if (!(IsDigit(sym) || IsSpecSym(sym)))
+                        {
+                            noError = false;
+                            buff = "";
+                            return;
+                        }
+                        else if (IsSpecSym(sym))
+                        {
+                            Lit.Add(buff);      //buff or buff2?
+                            buff = "";
+                            ReadSym(sym);
+                        }
+                        else
+                        {
+                            buff += sym;
+                        }
+                        break;
+                    }
+                case States.Rzd:
+                    {
+                        if (IsSpecSym(sym))
+                        {
+                            buff += sym;
+                        }
+                        else
+                        {
+                            Rzd.Add(buff);      //buff or buff2?
+                            buff = "";
+                            ReadSym(sym);
+                        }
+                        break;
+                    }
+                case States.Idn:
+                    {
+                        if (IsSpecSym(sym))
+                        {
+                            Idn.Add(buff);      //buff or buff2?
+                            buff = "";
+                            ReadSym(sym);
+                        }
+                        else
+                        {
+                            buff += sym;
+                        }
+                        break;
+                    }
+            }
 
 
 
@@ -149,7 +271,7 @@ namespace AnalizBibl
             ////        }
             ////    }
             ////}
-            
+
             //if (sym != " ")
             //{
             //    //ToState(sym);
