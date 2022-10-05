@@ -13,6 +13,8 @@ namespace AnalizBibl
         const byte maxleng = 8;
         bool noError = true;
         string[] specsym = { ":", ";", "+","*","(",")", "="};
+        //string[] commsym = { "//", "/*", "*/" };
+        //string[] oneCommsym = { "/", "*" };
         string path;
         //const string path = "Data.txt";
         //static readonly string[] States = { "Idn", "Lit", "Rzd" };
@@ -20,7 +22,7 @@ namespace AnalizBibl
         {
             None, Idn, Lit, Rzd
         }
-
+        
         States state = States.None;
 
         //string State = "";
@@ -41,15 +43,17 @@ namespace AnalizBibl
         {
             if (File.Exists(path))
             {
-                StreamReader reader = new StreamReader(path);
-                //string sym;
-                ReadSym(reader);
-                //while ((sym = reader.Read().ToString()) != null)
-                //{
-                    
-                //    ReadSym(sym);
-                //}
-                reader.Close();
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    //string sym;
+                    ReadSym(reader);
+                    //while ((sym = reader.Read().ToString()) != null)
+                    //{
+
+                    //    ReadSym(sym);
+                    //}
+                    reader.Close();
+                }
             }
             else
             {
@@ -71,6 +75,7 @@ namespace AnalizBibl
         }
         private void ToState(string s)
         {
+
             if (IsSpecSym(s))
             {
                 //State = States[2];
@@ -134,6 +139,42 @@ namespace AnalizBibl
         //{
 
         //}
+        //private bool CheckCommentOne(string s)
+        //{
+        //    bool b = false;
+        //    foreach(string st in oneCommsym)
+        //    {
+        //        if(st == s)
+        //        {
+        //            b = true;
+        //            break;
+        //        }
+        //    }
+        //    return b;
+        //}
+        //private bool CheckComment(string s)
+        //{
+        //    bool b = false;
+        //    foreach (string st in commsym)
+        //    {
+        //        if (st == s)
+        //        {
+        //            b = true;
+        //            break;
+        //        }
+        //    }
+        //    return b;
+        //}
+        //private bool CheckEndComment(string s)
+        //{
+        //    bool b = false;
+        //    if(s == "\n")
+        //    {
+        //        b = true;
+        //    }
+
+        //    return b;
+        //}
         private bool CheckSpase(string s)
         {
             Regex regex = new Regex(@"\s");
@@ -147,16 +188,13 @@ namespace AnalizBibl
         }
         private void ReadSym(StreamReader reader)
         {
-            
-            int i;
-
-            if ((i = reader.Peek()) != -1)
+            if (reader.Peek() != -1)
             {
                 string sym = ((char)reader.Read()).ToString();
 
                 while (CheckSpase(sym))
                 {
-                    if ((i = reader.Peek()) != -1)
+                    if (reader.Peek() != -1)
                     {
                         sym = ((char)reader.Read()).ToString();
                     }
@@ -166,15 +204,26 @@ namespace AnalizBibl
                     }
                 }
                 
+                //if (CheckCommentOne(sym))
+                //{
+                //    string buff2 = sym + (char)reader.Peek();
+                //    if (CheckComment(buff2))
+                //    {
+                //        do
+                //        {
+                //            sym = ((char)reader.Read()).ToString();
+                //        } while (!CheckEndComment(sym));
+                //    }
+                //}
 
                 ToState(sym);
                 buff = sym;
                 
-                if ((i = reader.Peek()) == -1)
+                if (reader.Peek() == -1)
                 {
                     ReadSym(" ");
                 }
-                while ((i = reader.Peek()) != -1)
+                while (reader.Peek() != -1)
                 {
                     sym = ((char)reader.Read()).ToString();
                     ReadSym(sym);
@@ -193,26 +242,26 @@ namespace AnalizBibl
                 {
                     case States.Lit:
                         {
-                            if (!Lit.Contains(buff))
-                            {
+                           // if (!Lit.Contains(buff))
+                           // {
                                 Lit.Add(buff);
-                            }
+                            //}
                             break;
                         }
                     case States.Rzd:
                         {
-                            if (!Rzd.Contains(buff))
-                            {
+                           // if (!Rzd.Contains(buff))
+                            //{
                                 Rzd.Add(buff);
-                            }
+                           // }
                             break;
                         }
                     case States.Idn:
                         {
-                            if (!Idn.Contains(buff))
-                            {
+                           // if (!Idn.Contains(buff))
+                           // {
                                 Idn.Add(buff);
-                            }
+                           // }
                             break;
                         }
                 }
@@ -230,6 +279,19 @@ namespace AnalizBibl
 
             string buff2 = buff;
 
+            //if (CheckCommentOne(sym))
+            //{
+
+            //    string buff2 = sym + (char)reader.Peek();
+            //    if (CheckComment(buff2))
+            //    {
+            //        do
+            //        {
+            //            sym = ((char)reader.Read()).ToString();
+            //        } while (!CheckEndComment(sym));
+            //    }
+            //}
+
             switch (state){
                 case States.Lit:
                     {
@@ -241,10 +303,10 @@ namespace AnalizBibl
                         }
                         else if (IsSpecSym(sym))
                         {
-                            if (!Lit.Contains(buff))
-                            {
+                           // if (!Lit.Contains(buff))
+                           // {
                                 Lit.Add(buff);
-                            }                           //buff or buff2?
+                            //}                           //buff or buff2?
                             buff = "";
                             state = States.None;
                             ReadSym(sym);
@@ -257,10 +319,10 @@ namespace AnalizBibl
                     }
                 case States.Rzd:
                     {
-                        if (!Rzd.Contains(buff))
-                        {
+                       // if (!Rzd.Contains(buff))
+                        //{
                             Rzd.Add(buff);
-                        }                        //buff or buff2?
+                        //}                        //buff or buff2?
                         buff = "";
                         state = States.None;
                         ReadSym(sym);
@@ -272,10 +334,10 @@ namespace AnalizBibl
                         if (IsSpecSym(sym))
                         {
                             
-                            if (!Idn.Contains(buff))
-                            {
+                           // if (!Idn.Contains(buff))
+                           // {
                                 Idn.Add(buff);
-                            }                                //buff or buff2?
+                           // }                                //buff or buff2?
                             buff = "";
                             state= States.None;
                             ReadSym(sym);

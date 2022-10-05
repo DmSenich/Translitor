@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.bLoad = new System.Windows.Forms.Button();
             this.StringsCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bLoad = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,18 +45,8 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(395, 426);
+            this.dataGridView1.Size = new System.Drawing.Size(410, 426);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // bLoad
-            // 
-            this.bLoad.Location = new System.Drawing.Point(428, 12);
-            this.bLoad.Name = "bLoad";
-            this.bLoad.Size = new System.Drawing.Size(91, 33);
-            this.bLoad.TabIndex = 1;
-            this.bLoad.Text = "Load";
-            this.bLoad.UseVisualStyleBackColor = true;
-            this.bLoad.Click += new System.EventHandler(this.bLoad_Click);
             // 
             // StringsCol
             // 
@@ -71,6 +61,16 @@
             this.NameCol.MinimumWidth = 6;
             this.NameCol.Name = "NameCol";
             this.NameCol.Width = 125;
+            // 
+            // bLoad
+            // 
+            this.bLoad.Location = new System.Drawing.Point(448, 12);
+            this.bLoad.Name = "bLoad";
+            this.bLoad.Size = new System.Drawing.Size(91, 33);
+            this.bLoad.TabIndex = 1;
+            this.bLoad.Text = "Load";
+            this.bLoad.UseVisualStyleBackColor = true;
+            this.bLoad.Click += new System.EventHandler(this.bLoad_Click);
             // 
             // Form1
             // 
