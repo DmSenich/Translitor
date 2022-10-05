@@ -10,6 +10,7 @@ namespace AnalizBibl
 {
     public class Analiz
     {
+        string[] keyWords;
         const byte maxleng = 8;
         bool noError = true;
         string[] specsym = { ":", ";", "+","*","(",")", "="};
