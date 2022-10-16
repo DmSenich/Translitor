@@ -14,11 +14,7 @@ namespace Main
     public partial class Form1 : Form
     {
         const string path = "Data.txt";
-
-        
-        List<string> Idn = new List<string>();
-        List<string> Lit = new List<string>();
-        List<string> Rzd = new List<string>();
+        List<Token> allWords;
         List<string> keyWords;
 
         public Form1()
@@ -32,34 +28,13 @@ namespace Main
             Analiz analiz = new Analiz(path);
             if (analiz.Scaning())
             {
-                List<string> allIdn = analiz.ReturnIdent();
-                List<string> allLit = analiz.ReturnLiter();
-                List<string> allRzd = analiz.ReturnRzd();
 
+                allWords = analiz.ReturnAllWords();
                 keyWords = analiz.ReturnKeyWords();
-                foreach(string s in allIdn)
+
+                foreach (Token tok in allWords)
                 {
-                    if (!Idn.Contains(s))
-                    {
-                        Idn.Add(s);
-                    }
-                    dataGridView1.Rows.Add(s, "Идентификатор");
-                }
-                foreach(string s in allLit)
-                {
-                    if (!Lit.Contains(s))
-                    {
-                        Lit.Add(s);
-                    }
-                    dataGridView1.Rows.Add(s, "Литерал");
-                }
-                foreach (string s in allRzd)
-                {
-                    if (!Rzd.Contains(s))
-                    {
-                        Rzd.Add(s);
-                    }
-                    dataGridView1.Rows.Add(s, "Разделитель");
+                    dataGridView1.Rows.Add(tok.word, tok.type);
                 }
             }
             else
@@ -72,7 +47,7 @@ namespace Main
         {
             try
             {
-                Form2 form2 = new Form2(Idn, Lit, Rzd, keyWords);
+                Form2 form2 = new Form2(allWords, keyWords);
                 form2.Show();
             }
             catch
