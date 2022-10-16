@@ -10,7 +10,7 @@ namespace AnalizBibl
 {
     public class Analiz
     {
-        string[] keyWords;
+        string[] keyWords = {"select", "case", "as", "integer", "else", "end"};
         const byte maxleng = 8;
         bool noError = true;
         string[] specsym = { ":", ";", "+","*","(",")", "="};
@@ -73,6 +73,15 @@ namespace AnalizBibl
         public List<string> ReturnRzd()
         {
             return Rzd;
+        }
+        public List<string> ReturnKeyWords()
+        {
+            List<string> kw = new List<string>();
+            foreach(string s in keyWords)
+            {
+                kw.Add(s);
+            }
+            return kw;
         }
         private void ToState(string s)
         {
