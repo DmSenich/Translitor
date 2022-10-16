@@ -22,25 +22,17 @@ namespace Main
         
         private void bLoad_Click(object sender, EventArgs e)
         {
+            
             dataGridView1.Rows.Clear();
             Analiz analiz = new Analiz(path);
             if (analiz.Scaning())
             {
-                List<string> Idn = analiz.ReturnIdent();
-                List<string> Lit = analiz.ReturnLiter();
-                List<string> Rzd = analiz.ReturnRzd();
 
-                foreach(string s in Idn)
+                List<Token> allWords = analiz.ReturnAllWords();
+
+                foreach(Token tok in allWords)
                 {
-                    dataGridView1.Rows.Add(s, "Идентификатор");
-                }
-                foreach(string s in Lit)
-                {
-                    dataGridView1.Rows.Add(s, "Литерал");
-                }
-                foreach (string s in Rzd)
-                {
-                    dataGridView1.Rows.Add(s, "Разделитель");
+                    dataGridView1.Rows.Add(tok.word, tok.type);
                 }
             }
             else

@@ -8,6 +8,17 @@ using System.Text.RegularExpressions;
 
 namespace AnalizBibl
 {
+    public struct Token
+    {
+        public string word;
+        public string type;
+        public Token(string word, string type)
+        {
+            this.word = word;
+            this.type = type;
+        }
+    }
+
     public class Analiz
     {
         const byte maxleng = 8;
@@ -23,14 +34,16 @@ namespace AnalizBibl
             None, Idn, Lit, Rzd
         }
         
+        
         States state = States.None;
 
         //string State = "";
 
-        List<string> Idn = new List<string>();
-        List<string> Lit = new List<string>();
-        List<string> Rzd = new List<string>();
+        //List<string> Idn = new List<string>();
+        //List<string> Lit = new List<string>();
+        //List<string> Rzd = new List<string>();
 
+        List<Token> allWords = new List<Token>();
         string buff = "";
 
         private Analiz() { }
@@ -61,17 +74,21 @@ namespace AnalizBibl
             }
             return noError;
         }
-        public List<string> ReturnIdent()
+        //public List<string> ReturnIdent()
+        //{
+        //    return Idn;
+        //}
+        //public List<string> ReturnLiter()
+        //{
+        //    return Lit;
+        //}
+        //public List<string> ReturnRzd()
+        //{
+        //    return Rzd;
+        //}
+        public List<Token> ReturnAllWords()
         {
-            return Idn;
-        }
-        public List<string> ReturnLiter()
-        {
-            return Lit;
-        }
-        public List<string> ReturnRzd()
-        {
-            return Rzd;
+            return allWords;
         }
         private void ToState(string s)
         {
@@ -244,7 +261,10 @@ namespace AnalizBibl
                         {
                            // if (!Lit.Contains(buff))
                            // {
-                                Lit.Add(buff);
+                                //Lit.Add(buff);
+                            Token token = new Token(buff, "L");
+
+                            allWords.Add(token);
                             //}
                             break;
                         }
@@ -252,16 +272,20 @@ namespace AnalizBibl
                         {
                            // if (!Rzd.Contains(buff))
                             //{
-                                Rzd.Add(buff);
-                           // }
+                                //Rzd.Add(buff);
+                            Token token = new Token(buff, "R");
+                            allWords.Add(token);
+                            // }
                             break;
                         }
                     case States.Idn:
                         {
                            // if (!Idn.Contains(buff))
                            // {
-                                Idn.Add(buff);
-                           // }
+                                //Idn.Add(buff);
+                            Token token = new Token(buff, "I");
+                            allWords.Add(token);
+                            // }
                             break;
                         }
                 }
@@ -305,7 +329,9 @@ namespace AnalizBibl
                         {
                            // if (!Lit.Contains(buff))
                            // {
-                                Lit.Add(buff);
+                                //Lit.Add(buff);
+                            Token token = new Token(buff, "L");
+                            allWords.Add(token);
                             //}                           //buff or buff2?
                             buff = "";
                             state = States.None;
@@ -321,7 +347,9 @@ namespace AnalizBibl
                     {
                        // if (!Rzd.Contains(buff))
                         //{
-                            Rzd.Add(buff);
+                            //Rzd.Add(buff);
+                        Token token = new Token(buff, "R");
+                        allWords.Add(token);
                         //}                        //buff or buff2?
                         buff = "";
                         state = States.None;
@@ -336,8 +364,10 @@ namespace AnalizBibl
                             
                            // if (!Idn.Contains(buff))
                            // {
-                                Idn.Add(buff);
-                           // }                                //buff or buff2?
+                                //Idn.Add(buff);
+                            Token token = new Token(buff, "I");
+                            allWords.Add(token);
+                            // }                                //buff or buff2?
                             buff = "";
                             state= States.None;
                             ReadSym(sym);
