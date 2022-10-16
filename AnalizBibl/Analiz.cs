@@ -18,12 +18,12 @@ namespace AnalizBibl
             this.type = type;
         }
     }
-
     public class Analiz
     {
         const byte maxleng = 8;
         bool noError = true;
-        string[] specsym = { ":", ";", "+","*","(",")", "="};
+        string[] specsym = { ":", ";", "+", "*", "(", ")", "=" };
+        string[] keyWords = { "Dim","select", "case", "as", "to", "integer", "else", "end" };
         //string[] commsym = { "//", "/*", "*/" };
         //string[] oneCommsym = { "/", "*" };
         string path;
@@ -33,15 +33,9 @@ namespace AnalizBibl
         {
             None, Idn, Lit, Rzd
         }
-        
-        
         States state = States.None;
 
         //string State = "";
-
-        //List<string> Idn = new List<string>();
-        //List<string> Lit = new List<string>();
-        //List<string> Rzd = new List<string>();
 
         List<Token> allWords = new List<Token>();
         string buff = "";
@@ -87,8 +81,22 @@ namespace AnalizBibl
         //    return Rzd;
         //}
         public List<Token> ReturnAllWords()
+
         {
             return allWords;
+        }
+        public List<string> ReturnKeyWords()
+        {
+            List<string> kw = new List<string>();
+            foreach (string s in keyWords)
+            {
+                kw.Add(s);
+            }
+            return kw;
+
+        {
+            return allWords;
+
         }
         private void ToState(string s)
         {
@@ -259,9 +267,11 @@ namespace AnalizBibl
                 {
                     case States.Lit:
                         {
+
                            // if (!Lit.Contains(buff))
                            // {
                                 //Lit.Add(buff);
+
                             Token token = new Token(buff, "L");
 
                             allWords.Add(token);
@@ -270,9 +280,11 @@ namespace AnalizBibl
                         }
                     case States.Rzd:
                         {
-                           // if (!Rzd.Contains(buff))
+                            // if (!Rzd.Contains(buff))
                             //{
-                                //Rzd.Add(buff);
+
+                            //Rzd.Add(buff);
+
                             Token token = new Token(buff, "R");
                             allWords.Add(token);
                             // }
@@ -280,9 +292,11 @@ namespace AnalizBibl
                         }
                     case States.Idn:
                         {
-                           // if (!Idn.Contains(buff))
-                           // {
-                                //Idn.Add(buff);
+
+                            // if (!Idn.Contains(buff))
+                            // {
+                            //Idn.Add(buff);
+
                             Token token = new Token(buff, "I");
                             allWords.Add(token);
                             // }
@@ -327,9 +341,11 @@ namespace AnalizBibl
                         }
                         else if (IsSpecSym(sym))
                         {
-                           // if (!Lit.Contains(buff))
-                           // {
-                                //Lit.Add(buff);
+
+                            // if (!Lit.Contains(buff))
+                            // {
+                            //Lit.Add(buff);
+
                             Token token = new Token(buff, "L");
                             allWords.Add(token);
                             //}                           //buff or buff2?
@@ -345,31 +361,34 @@ namespace AnalizBibl
                     }
                 case States.Rzd:
                     {
-                       // if (!Rzd.Contains(buff))
+                        // if (!Rzd.Contains(buff))
                         //{
-                            //Rzd.Add(buff);
+
+                        //Rzd.Add(buff);
+
                         Token token = new Token(buff, "R");
                         allWords.Add(token);
                         //}                        //buff or buff2?
                         buff = "";
                         state = States.None;
                         ReadSym(sym);
-                        
+
                         break;
                     }
                 case States.Idn:
                     {
                         if (IsSpecSym(sym))
                         {
-                            
-                           // if (!Idn.Contains(buff))
-                           // {
-                                //Idn.Add(buff);
+
+                            // if (!Idn.Contains(buff))
+                            // {
+                            //Idn.Add(buff);
+
                             Token token = new Token(buff, "I");
                             allWords.Add(token);
                             // }                                //buff or buff2?
                             buff = "";
-                            state= States.None;
+                            state = States.None;
                             ReadSym(sym);
                         }
                         else

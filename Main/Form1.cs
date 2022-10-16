@@ -14,7 +14,9 @@ namespace Main
     public partial class Form1 : Form
     {
         const string path = "Data.txt";
-        
+        List<Token> allWords;
+        List<string> keyWords;
+
         public Form1()
         {
             InitializeComponent();
@@ -28,9 +30,11 @@ namespace Main
             if (analiz.Scaning())
             {
 
-                List<Token> allWords = analiz.ReturnAllWords();
 
-                foreach(Token tok in allWords)
+                allWords = analiz.ReturnAllWords();
+                keyWords = analiz.ReturnKeyWords();
+
+                foreach (Token tok in allWords)
                 {
                     dataGridView1.Rows.Add(tok.word, tok.type);
                 }
@@ -38,6 +42,19 @@ namespace Main
             else
             {
                 MessageBox.Show("Несуществующий файл или лексические ошибки!", "Ошибка");
+            }
+        }
+
+        private void bCrTb_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Form2 form2 = new Form2(allWords, keyWords);
+                form2.Show();
+            }
+            catch
+            {
+                MessageBox.Show("Загрузите файл", "Ошибка");
             }
         }
     }
