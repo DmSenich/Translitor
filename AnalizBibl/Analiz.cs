@@ -94,9 +94,6 @@ namespace AnalizBibl
             }
             return kw;
 
-        {
-            return allWords;
-
         }
         private void ToState(string s)
         {
