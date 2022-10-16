@@ -33,8 +33,6 @@ namespace AnalizBibl
         {
             None, Idn, Lit, Rzd
         }
-
-
         States state = States.None;
 
         //string State = "";
@@ -83,6 +81,7 @@ namespace AnalizBibl
         //    return Rzd;
         //}
         public List<Token> ReturnAllWords()
+
         {
             return allWords;
         }
@@ -94,6 +93,10 @@ namespace AnalizBibl
                 kw.Add(s);
             }
             return kw;
+
+        {
+            return allWords;
+
         }
         private void ToState(string s)
         {
@@ -264,9 +267,11 @@ namespace AnalizBibl
                 {
                     case States.Lit:
                         {
-                            // if (!Lit.Contains(buff))
-                            // {
-                            //Lit.Add(buff);
+
+                           // if (!Lit.Contains(buff))
+                           // {
+                                //Lit.Add(buff);
+
                             Token token = new Token(buff, "L");
 
                             allWords.Add(token);
@@ -277,7 +282,9 @@ namespace AnalizBibl
                         {
                             // if (!Rzd.Contains(buff))
                             //{
+
                             //Rzd.Add(buff);
+
                             Token token = new Token(buff, "R");
                             allWords.Add(token);
                             // }
@@ -285,9 +292,11 @@ namespace AnalizBibl
                         }
                     case States.Idn:
                         {
+
                             // if (!Idn.Contains(buff))
                             // {
                             //Idn.Add(buff);
+
                             Token token = new Token(buff, "I");
                             allWords.Add(token);
                             // }
@@ -332,9 +341,11 @@ namespace AnalizBibl
                         }
                         else if (IsSpecSym(sym))
                         {
+
                             // if (!Lit.Contains(buff))
                             // {
                             //Lit.Add(buff);
+
                             Token token = new Token(buff, "L");
                             allWords.Add(token);
                             //}                           //buff or buff2?
@@ -352,7 +363,9 @@ namespace AnalizBibl
                     {
                         // if (!Rzd.Contains(buff))
                         //{
+
                         //Rzd.Add(buff);
+
                         Token token = new Token(buff, "R");
                         allWords.Add(token);
                         //}                        //buff or buff2?
@@ -370,6 +383,7 @@ namespace AnalizBibl
                             // if (!Idn.Contains(buff))
                             // {
                             //Idn.Add(buff);
+
                             Token token = new Token(buff, "I");
                             allWords.Add(token);
                             // }                                //buff or buff2?

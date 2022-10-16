@@ -24,10 +24,12 @@ namespace Main
         
         private void bLoad_Click(object sender, EventArgs e)
         {
+            
             dataGridView1.Rows.Clear();
             Analiz analiz = new Analiz(path);
             if (analiz.Scaning())
             {
+
 
                 allWords = analiz.ReturnAllWords();
                 keyWords = analiz.ReturnKeyWords();
