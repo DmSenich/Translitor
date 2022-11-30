@@ -16,7 +16,7 @@ namespace Main
         const string path = "Data.txt";
         List<Token> allWords;
         List<string> keyWords;
-
+        Dictionary<Token, TokenTableNum> tokenTable;
         public Form1()
         {
             InitializeComponent();
@@ -33,6 +33,7 @@ namespace Main
 
                 allWords = analiz.ReturnAllWords();
                 keyWords = analiz.ReturnKeyWords();
+                tokenTable = analiz.ReturnTables();
 
                 foreach (Token tok in allWords)
                 {
@@ -49,7 +50,7 @@ namespace Main
         {
             try
             {
-                Form2 form2 = new Form2(allWords, keyWords);
+                Form2 form2 = new Form2(allWords, keyWords, tokenTable);
                 form2.Show();
             }
             catch

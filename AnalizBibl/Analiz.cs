@@ -17,6 +17,17 @@ namespace AnalizBibl
             this.word = word;
             this.type = type;
         }
+        
+    }
+    public struct TokenTableNum
+    {
+        public int table;
+        public int num;
+        public TokenTableNum(int table, int num)
+        {
+            this.table = table;
+            this.num = num;
+        }
     }
     public class Analiz
     {
@@ -24,6 +35,7 @@ namespace AnalizBibl
         bool noError = true;
         string[] specsym = { ":", ";", "+", "*", "(", ")", "=" };
         string[] keyWords = { "Dim","select", "case", "as", "to", "integer", "else", "end" };
+        Dictionary<Token, TokenTableNum> tokenTable = new Dictionary<Token, TokenTableNum>();
         //string[] commsym = { "//", "/*", "*/" };
         //string[] oneCommsym = { "/", "*" };
         string path;
@@ -45,7 +57,54 @@ namespace AnalizBibl
         {
             this.path = path;
         }
-
+        private void ToCreateTables()
+        {
+            int countKey = 0, countI = 0, countL = 0, countR = 0;
+            foreach (Token word in allWords)
+            {
+                switch (word.type)
+                {
+                    case "I":
+                        if (keyWords.Contains(word.word))
+                        {
+                            if (!tokenTable.ContainsKey(word))
+                            {
+                                TokenTableNum tokenNum = new TokenTableNum(1, countKey);
+                                tokenTable.Add(word, tokenNum);
+                                countKey++;
+                            } 
+                        }
+                        else
+                        {
+                            if (!tokenTable.ContainsKey(word))
+                            {
+                                TokenTableNum tokenNum = new TokenTableNum(2, countI);
+                                tokenTable.Add(word, tokenNum);
+                                countI++;
+                            }
+                        }
+                        break;
+                    case "L":
+                        if (!tokenTable.ContainsKey(word))
+                        {
+                            TokenTableNum tokenNum = new TokenTableNum(4, countR);
+                            tokenTable.Add(word, tokenNum);
+                            countR++;
+                        }
+                            
+                        break;
+                    case "R":
+                        if (!tokenTable.ContainsKey(word))
+                        {
+                            TokenTableNum tokenNum = new TokenTableNum(3, countL);
+                            tokenTable.Add(word, tokenNum);
+                            countL++;
+                        }
+                            
+                        break;
+                }
+            }
+        }
         public bool Scaning()
         {
             if (File.Exists(path))
@@ -66,6 +125,10 @@ namespace AnalizBibl
             {
                 noError = false;
             }
+            if (noError)
+            {
+                ToCreateTables();
+            }
             return noError;
         }
         //public List<string> ReturnIdent()
@@ -84,6 +147,10 @@ namespace AnalizBibl
 
         {
             return allWords;
+        }
+        public Dictionary<Token, TokenTableNum> ReturnTables()
+        {
+            return tokenTable;
         }
         public List<string> ReturnKeyWords()
         {
