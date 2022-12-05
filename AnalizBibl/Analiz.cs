@@ -33,8 +33,8 @@ namespace AnalizBibl
     {
         const byte maxleng = 8;
         bool noError = true;
-        string[] specsym = { ":", ";", "+", "*", "(", ")", "=" };
-        string[] keyWords = { "Dim","select", "case", "as", "to", "integer", "else", "end" };
+        string[] specsym = { ":", ";", "+", "*", "(", ")", "=", ",", "\n" };
+        string[] keyWords = { "Dim","select", "case", "as", "to", "integer" , "float", "double", "else", "end"};
         Dictionary<Token, TokenTableNum> tokenTable = new Dictionary<Token, TokenTableNum>();
         //string[] commsym = { "//", "/*", "*/" };
         //string[] oneCommsym = { "/", "*" };
@@ -269,7 +269,7 @@ namespace AnalizBibl
             Regex regex = new Regex(@"\s");
             bool b = false;
 
-            if (regex.IsMatch(s))
+            if (regex.IsMatch(s) && s != "\n")
             {
                 b = true;
             }
@@ -348,6 +348,10 @@ namespace AnalizBibl
                             //{
 
                             //Rzd.Add(buff);
+                            if(buff == "\n")
+                            {
+                                buff = "\\n";
+                            }
 
                             Token token = new Token(buff, "R");
                             allWords.Add(token);
@@ -429,7 +433,10 @@ namespace AnalizBibl
                         //{
 
                         //Rzd.Add(buff);
-
+                        if(buff == "\n")
+                        {
+                            buff = "\\n";
+                        }
                         Token token = new Token(buff, "R");
                         allWords.Add(token);
                         //}                        //buff or buff2?
