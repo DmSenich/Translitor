@@ -1,6 +1,6 @@
 ﻿namespace Main
 {
-    partial class Form1
+    partial class FormLexicalAnalysis
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -33,6 +33,9 @@
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bLoad = new System.Windows.Forms.Button();
             this.bCrTb = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.bOperate = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,7 +78,7 @@
             // 
             // bCrTb
             // 
-            this.bCrTb.Location = new System.Drawing.Point(562, 12);
+            this.bCrTb.Location = new System.Drawing.Point(688, 12);
             this.bCrTb.Name = "bCrTb";
             this.bCrTb.Size = new System.Drawing.Size(100, 33);
             this.bCrTb.TabIndex = 2;
@@ -83,16 +86,40 @@
             this.bCrTb.UseVisualStyleBackColor = true;
             this.bCrTb.Click += new System.EventHandler(this.bCrTb_Click);
             // 
-            // Form1
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(448, 74);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(340, 364);
+            this.richTextBox1.TabIndex = 3;
+            this.richTextBox1.Text = "";
+            // 
+            // bOperate
+            // 
+            this.bOperate.Location = new System.Drawing.Point(574, 12);
+            this.bOperate.Name = "bOperate";
+            this.bOperate.Size = new System.Drawing.Size(91, 33);
+            this.bOperate.TabIndex = 4;
+            this.bOperate.Text = "Анализ";
+            this.bOperate.UseVisualStyleBackColor = true;
+            this.bOperate.Click += new System.EventHandler(this.bOperate_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // FormlexicalAnalysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.bOperate);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.bCrTb);
             this.Controls.Add(this.bLoad);
             this.Controls.Add(this.dataGridView1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "FormlexicalAnalysis";
+            this.Text = "Лексический анализатор";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -105,6 +132,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn StringsCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
         private System.Windows.Forms.Button bCrTb;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Button bOperate;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

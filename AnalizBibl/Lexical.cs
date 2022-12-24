@@ -19,26 +19,27 @@ namespace AnalizBibl
         }
         
     }
-    public struct TokenTableNum
-    {
-        public int table;
-        public int num;
-        public TokenTableNum(int table, int num)
-        {
-            this.table = table;
-            this.num = num;
-        }
-    }
-    public class Analiz
+    //public struct TokenTableNum
+    //{
+    //    public int table;
+    //    public int num;
+    //    public TokenTableNum(int table, int num)
+    //    {
+    //        this.table = table;
+    //        this.num = num;
+    //    }
+    //}
+    public class Lexical
     {
         const byte maxleng = 8;
         bool noError = true;
-        string[] specsym = { ":", ";", "+", "*", "(", ")", "=", ",", "\n" };
+        string[] specsym = { "/", ";", "+", "-", "*", "(", ")", "=", ",", "\n" };
         string[] keyWords = { "Dim","select", "case", "as", "to", "integer" , "float", "double", "else", "end"};
-        Dictionary<Token, TokenTableNum> tokenTable = new Dictionary<Token, TokenTableNum>();
+        Dictionary<Token, int> tokenTable = new Dictionary<Token, int>();
+        //Dictionary<Token, TokenTableNum> tokenTable = new Dictionary<Token, TokenTableNum>();
         //string[] commsym = { "//", "/*", "*/" };
         //string[] oneCommsym = { "/", "*" };
-        string path;
+        //string path;
         //const string path = "Data.txt";
         //static readonly string[] States = { "Idn", "Lit", "Rzd" };
         enum States
@@ -46,16 +47,20 @@ namespace AnalizBibl
             None, Idn, Lit, Rzd
         }
         States state = States.None;
-
+        MemoryStream mProgram;
         //string State = "";
 
         List<Token> allWords = new List<Token>();
         string buff = "";
 
-        private Analiz() { }
-        public Analiz(string path)
+        private Lexical() { }
+        //public Analiz(string path)
+        //{
+        //    this.path = path;
+        //}
+        public Lexical(MemoryStream mProgram)
         {
-            this.path = path;
+            this.mProgram = mProgram;
         }
         private void ToCreateTables()
         {
@@ -69,8 +74,9 @@ namespace AnalizBibl
                         {
                             if (!tokenTable.ContainsKey(word))
                             {
-                                TokenTableNum tokenNum = new TokenTableNum(1, countKey);
-                                tokenTable.Add(word, tokenNum);
+                                //TokenTableNum tokenNum = new TokenTableNum(1, countKey);
+
+                                tokenTable.Add(word, countKey);
                                 countKey++;
                             } 
                         }
@@ -78,8 +84,8 @@ namespace AnalizBibl
                         {
                             if (!tokenTable.ContainsKey(word))
                             {
-                                TokenTableNum tokenNum = new TokenTableNum(2, countI);
-                                tokenTable.Add(word, tokenNum);
+                                //TokenTableNum tokenNum = new TokenTableNum(2, countI);
+                                tokenTable.Add(word, countI);
                                 countI++;
                             }
                         }
@@ -87,8 +93,8 @@ namespace AnalizBibl
                     case "L":
                         if (!tokenTable.ContainsKey(word))
                         {
-                            TokenTableNum tokenNum = new TokenTableNum(4, countR);
-                            tokenTable.Add(word, tokenNum);
+                            //TokenTableNum tokenNum = new TokenTableNum(4, countR);
+                            tokenTable.Add(word, countR);
                             countR++;
                         }
                             
@@ -96,8 +102,8 @@ namespace AnalizBibl
                     case "R":
                         if (!tokenTable.ContainsKey(word))
                         {
-                            TokenTableNum tokenNum = new TokenTableNum(3, countL);
-                            tokenTable.Add(word, tokenNum);
+                            //TokenTableNum tokenNum = new TokenTableNum(3, countL);
+                            tokenTable.Add(word, countL);
                             countL++;
                         }
                             
@@ -105,11 +111,11 @@ namespace AnalizBibl
                 }
             }
         }
-        public bool Scaning()
+        public void Scaning()
         {
-            if (File.Exists(path))
+            if (mProgram != null)
             {
-                using (StreamReader reader = new StreamReader(path))
+                using (StreamReader reader = new StreamReader(mProgram))
                 {
                     //string sym;
                     ReadSym(reader);
@@ -129,26 +135,19 @@ namespace AnalizBibl
             {
                 ToCreateTables();
             }
-            return noError;
+            else
+            {
+                throw new Exception("Обнаружена лексическая ошибка!");
+            }
         }
-        //public List<string> ReturnIdent()
-        //{
-        //    return Idn;
-        //}
-        //public List<string> ReturnLiter()
-        //{
-        //    return Lit;
-        //}
-        //public List<string> ReturnRzd()
-        //{
-        //    return Rzd;
-        //}
+ 
         public List<Token> ReturnAllWords()
 
         {
             return allWords;
         }
-        public Dictionary<Token, TokenTableNum> ReturnTables()
+
+        public Dictionary<Token, int> ReturnTables()
         {
             return tokenTable;
         }
@@ -207,63 +206,6 @@ namespace AnalizBibl
             return b;
         }
 
-        //private void CheckLine(string line)
-        //{
-
-        //    CheckInd(line);
-        //    CheckLit(line);
-        //    CheckRzd(line);
-
-
-        //}
-        //private void CheckInd(string line)
-        //{
-            
-        //}
-        //private void CheckLit(string line)
-        //{
-
-        //}
-        //private void CheckRzd(string line)
-        //{
-
-        //}
-        //private bool CheckCommentOne(string s)
-        //{
-        //    bool b = false;
-        //    foreach(string st in oneCommsym)
-        //    {
-        //        if(st == s)
-        //        {
-        //            b = true;
-        //            break;
-        //        }
-        //    }
-        //    return b;
-        //}
-        //private bool CheckComment(string s)
-        //{
-        //    bool b = false;
-        //    foreach (string st in commsym)
-        //    {
-        //        if (st == s)
-        //        {
-        //            b = true;
-        //            break;
-        //        }
-        //    }
-        //    return b;
-        //}
-        //private bool CheckEndComment(string s)
-        //{
-        //    bool b = false;
-        //    if(s == "\n")
-        //    {
-        //        b = true;
-        //    }
-
-        //    return b;
-        //}
         private bool CheckSpase(string s)
         {
             Regex regex = new Regex(@"\s");
@@ -293,17 +235,6 @@ namespace AnalizBibl
                     }
                 }
                 
-                //if (CheckCommentOne(sym))
-                //{
-                //    string buff2 = sym + (char)reader.Peek();
-                //    if (CheckComment(buff2))
-                //    {
-                //        do
-                //        {
-                //            sym = ((char)reader.Read()).ToString();
-                //        } while (!CheckEndComment(sym));
-                //    }
-                //}
 
                 ToState(sym);
                 buff = sym;
@@ -312,6 +243,8 @@ namespace AnalizBibl
                 {
                     ReadSym(" ");
                 }
+
+
                 while (reader.Peek() != -1)
                 {
                     sym = ((char)reader.Read()).ToString();
@@ -321,6 +254,8 @@ namespace AnalizBibl
                         return;
                     }
                 }
+                ReadSym(" ");
+
             }
         }
         private void ReadSym(string sym)

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", "{FC25698B-B62A-43FF-876E-EEB46F909B3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalizBibl", "AnalizBibl\AnalizBibl.csproj", "{19DCD934-D8C0-4D92-BBE1-926BC5F2D9F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalysisLibrary", "AnalizBibl\AnalysisLibrary.csproj", "{19DCD934-D8C0-4D92-BBE1-926BC5F2D9F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
