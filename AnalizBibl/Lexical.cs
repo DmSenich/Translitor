@@ -171,6 +171,11 @@ namespace AnalizBibl
             }
             else if (state == States.None)
             {
+                if(s == ".")
+                {
+                    noError = false;
+                    return;
+                }
                 if(IsDigit(s))
                 {
                     //State = States[1];
@@ -182,6 +187,7 @@ namespace AnalizBibl
                     state = States.Idn;
                 }
             }
+            else { noError = false; return; }
         }
         private bool IsSpecSym(string s)
         {
@@ -266,10 +272,13 @@ namespace AnalizBibl
                 {
                     case States.Lit:
                         {
-
-                           // if (!Lit.Contains(buff))
-                           // {
-                                //Lit.Add(buff);
+                            if (buff.Last().ToString() == ".")
+                            {
+                                buff = buff.Remove(buff.LastIndexOf('.'));
+                            }
+                            // if (!Lit.Contains(buff))
+                            // {
+                            //Lit.Add(buff);
 
                             Token token = new Token(buff, "L");
 
@@ -296,9 +305,11 @@ namespace AnalizBibl
                     case States.Idn:
                         {
 
-                            // if (!Idn.Contains(buff))
-                            // {
-                            //Idn.Add(buff);
+                            if(buff.Last().ToString() == ".")
+                            {
+                                noError = false;
+                                return;
+                            }
 
                             Token token = new Token(buff, "I");
                             allWords.Add(token);
@@ -320,23 +331,10 @@ namespace AnalizBibl
 
             string buff2 = buff;
 
-            //if (CheckCommentOne(sym))
-            //{
-
-            //    string buff2 = sym + (char)reader.Peek();
-            //    if (CheckComment(buff2))
-            //    {
-            //        do
-            //        {
-            //            sym = ((char)reader.Read()).ToString();
-            //        } while (!CheckEndComment(sym));
-            //    }
-            //}
-
             switch (state){
                 case States.Lit:
                     {
-                        if (!(IsDigit(sym) || IsSpecSym(sym)))
+                        if (!(IsDigit(sym) || IsSpecSym(sym) || sym == "."))
                         {
                             noError = false;
                             buff = "";
@@ -344,14 +342,9 @@ namespace AnalizBibl
                         }
                         else if (IsSpecSym(sym))
                         {
-
-                            // if (!Lit.Contains(buff))
-                            // {
-                            //Lit.Add(buff);
-
+                            
                             Token token = new Token(buff, "L");
                             allWords.Add(token);
-                            //}                           //buff or buff2?
                             buff = "";
                             state = States.None;
                             ReadSym(sym);
@@ -399,7 +392,7 @@ namespace AnalizBibl
                         }
                         else
                         {
-                            if (buff.Length >= maxleng)
+                            if (buff.Length >= maxleng || sym == ".")
                             {
                                 noError = false;
                                 return;

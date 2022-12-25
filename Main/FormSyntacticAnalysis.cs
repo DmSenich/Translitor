@@ -39,7 +39,16 @@ namespace Main
         }
         public FormSyntacticAnalysis(List<Token> allWords, List<string> keyWords, Dictionary<Token, int> tokenTable) : this()
         {
-
+            if (allWords is null || keyWords is null || tokenTable is null)
+            {
+                Close();
+                throw new Exception("Не произведен лексический анализ!");
+            }
+            else if(allWords.Count == 0 || keyWords.Count == 0 || tokenTable.Count == 0)
+            {
+                Close();
+                throw new Exception("Не произведен лексический анализ!");
+            }
             this.allWords = allWords;
             this.keyWords = keyWords;
             this.tokenTable = tokenTable;
@@ -64,7 +73,7 @@ namespace Main
             {
                 MessageBox.Show(ex.Message);
                 int curr = validate.Current;
-                lRes.Text = sError + allWords[curr].word + " " + curr;
+                lRes.Text = "'" + allWords[curr].word + "' " + ex.Message.ToString();
             }
             //if (validate.Program())
             //{

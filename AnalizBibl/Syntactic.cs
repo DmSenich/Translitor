@@ -37,13 +37,21 @@ namespace AnalizBibl
             {
                 case "Dim":
                     res = ListOfOperators();
+                    if(current > allWords.Count - 1)
+                    {
+                        break;
+                    }
+                    if (allWords[current].word == "end" || allWords[current].word == "case")
+                    {
+                        throw new Exception($"Использование end или case вне оператора switch! Необходимо объявление переменных, лексема {current}, Program.");
+                    }
                     break;
                 //case "select":
                 //    break;
                 //case "id":
                 //    break;
                 default:
-                    throw new Exception("Ожидался оператор Dim! Необходимо объявление переменных.Pr");
+                    throw new Exception($"Ожидался оператор Dim! Необходимо объявление переменных, лексема {current}, Program.");
                     //break;
             }
             
@@ -68,7 +76,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидался переход на новую строку. ListOp");
+                throw new Exception($"Ожидался переход на новую строку, лексема {current}, ListOfOperators.");
                 //return false;
             }
             if (SpawnOperator())
@@ -77,7 +85,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидался оператор! ListOp");
+                throw new Exception($"Ожидался оператор! Лексема {current}, ListOfOperators");
                 //return false;
             }
 
@@ -105,7 +113,7 @@ namespace AnalizBibl
                     }
                     else
                     {
-                        throw new Exception("Ожидался оператор какой-то Oper");
+                        throw new Exception($"Ожидался оператор, лексема {current}, Operator()");
                         //res = false;
                     }
 
@@ -132,18 +140,42 @@ namespace AnalizBibl
                     break;
                 case "select":
                     res = ListOfOperators();
+                    if (current > allWords.Count - 1)
+                    {
+                        return res;
+                    }
+                    if (allWords[current].word == "end" || allWords[current].word == "case")
+                    {
+                        throw new Exception($"Использование end или case вне оператора switch! Необходимо объявление переменных, лексема {current}, SpawnOperator.");
+                    }
                     break;
                 case "Dim":
                     res = ListOfOperators();
+                    if (current > allWords.Count - 1)
+                    {
+                        return res;
+                    }
+                    if (allWords[current].word == "end" || allWords[current].word == "case")
+                    {
+                        throw new Exception($"Использование end или case вне оператора switch! Необходимо объявление переменных, лексема {current}, SpawnOperator.");
+                    }
                     break;
                 default:
                     if (Idn.Contains(allWords[current]))
                     {
                         res = ListOfOperators();
+                        if (current > allWords.Count - 1)
+                        {
+                            return res;
+                        }
+                        if (allWords[current].word == "end" || allWords[current].word == "case")
+                        {
+                            throw new Exception($"Использование end или case вне оператора switch! Необходимо объявление переменных, лексема {current}, SpawnOperator.");
+                        }
                     }
                     else
                     {
-                        throw new Exception("Ожид как опер или что-то SpawnOp");
+                        throw new Exception($"Ожидался оператор или его продолжение, лексема {current}, SpawnOperator");
                         //res = false;
                     }
                     break;
@@ -161,15 +193,19 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось ключевое слово 'Dim'! Descr");
+                throw new Exception($"Ожидалось ключевое слово 'Dim'!, лексема {current}, Description");
             }
             if(Idn.Contains(allWords[current]))
             {
                 res = Identifier();
             }
+            else
+            {
+                throw new Exception($"Ожидался идентификатор! Лексема {current}, Description");
+            }
             if (!res)
             {
-                throw new Exception("Ожидался идентификатор! Descr");
+                throw new Exception($"Ожидался идентификатор! Лексема {current}, Description");
             }
             if(allWords[current].word == "as")
             {
@@ -177,7 +213,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось ключевое слово 'as'! Descr");
+                throw new Exception($"Ожидалось ключевое слово 'as'! Лексема {current}, Description");
             }
             if(key.Contains(allWords[current]))
             {
@@ -185,7 +221,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось объявление типа переменной! Descr");
+                throw new Exception($"Ожидалось объявление типа переменной! Лексема {current}, Description");
             }
             if (!res)
             {
@@ -205,7 +241,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось ключевое слово 'select'!sw");
+                throw new Exception($"Ожидалось ключевое слово 'select'! Лексема {current}, Switch");
             }
             if (allWords[current].word == "case")
             {
@@ -213,7 +249,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось ключевое слово 'case'! sw");
+                throw new Exception($"Ожидалось ключевое слово 'case'! Лексема {current}, Switch");
             }
             if (Idn.Contains(allWords[current]))
             {
@@ -221,7 +257,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Идент!sw");
+                throw new Exception($"Ожидался идентификатор, лексема {current}, Switch");
             }
             if(allWords[current].word == "\\n")
             {
@@ -229,7 +265,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Переход! sw");
+                throw new Exception($"Ожидался переход на новую стороку, лексема {current}, Switch");
             }
 
             if (Cases())
@@ -238,7 +274,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидался какой-то кейс! sw");
+                throw new Exception($"Ожидался case, лексема {current}, Switch");
             }
             if (allWords[current].word == "end")
             {
@@ -246,7 +282,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось ключевое слово 'end'!sw");
+                throw new Exception($"Ожидалось ключевое слово 'end'! Лексема {current}, Switch");
             }
             if (allWords[current].word == "select")
             {
@@ -255,7 +291,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось ключевое слово 'select'!sw");
+                throw new Exception($"Ожидалось ключевое слово 'select', лексема {current}, Switch");
             }
 
 
@@ -272,7 +308,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось кайс!Cass");
+                throw new Exception($"Ожидалось case! Лексема {current}, Cases");
             }
 
             if (SpawnCases()) //// plll
@@ -285,7 +321,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось Spawnкайс!Cass");
+                throw new Exception($"Ожидалось case, лексема {current}, Cases");
             }
 
             return res;
@@ -300,7 +336,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидалось кайсValue!Cs");
+                throw new Exception($"Ожидалось значение case! Лексема {current}, Case");
             }
             if (allWords[current].word == "\\n")
             {
@@ -308,7 +344,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Переход!Cs");
+                throw new Exception($"Ожидался переход, лексема {current}, Case");
             }
             if (ListOfOperators())
             {
@@ -316,12 +352,12 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Операторы Cs");
+                throw new Exception($"Ожидался оператор, лексема {current}, Case");
             }
 
             return res;
         }
-        private bool ValueCase() /// aaaa
+        private bool ValueCase() 
         {
             bool res = true;
 
@@ -331,15 +367,15 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Case! vs");
+                throw new Exception($"Ожидалось ключевое слово 'case', лексема {current}, ValueCase");
             }
             if (!EventValueCase())
             {
-                throw new Exception("Event vs");
+                throw new Exception($"Возможные значения case, лексема {current}, ValueCase");
             }
             if (!(allWords[current].word == "\\n"))
             {
-                throw new Exception("Переход vs");
+                throw new Exception($"Ожидался переход, лексема {current}, ValueCase");
             }
 
             return res;
@@ -362,7 +398,7 @@ namespace AnalizBibl
                     }
                     else
                     {
-                        throw new Exception("Event или литы Evc");
+                        throw new Exception($"Ожидались числа или ключевое слово 'else', лексема {current}, EventValueCase");
                     }
                     break;
             }
@@ -379,7 +415,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Лит1 ltl");
+                throw new Exception($"Ожидалось число, лексема {current}, LitToLit");
             }
 
             switch (allWords[current].word)
@@ -395,12 +431,12 @@ namespace AnalizBibl
                     }
                     else
                     {
-                        throw new Exception("To или переход ltl");
+                        throw new Exception($"Ожидались переход или ключевое слово 'to', лексема {current}, LitToLit");
                     }
             }
             if (!res) 
             {
-                throw new Exception("Lits any! ltl");
+                throw new Exception($"Ожидались литералы, лексема {current}, LitToLit");
             }
 
             if (Lit.Contains(allWords[current]))
@@ -410,7 +446,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("литы ltl");
+                throw new Exception($"Ожидались литералы, лексема {current}, LitToLit");
             }
 
             return res;
@@ -429,7 +465,7 @@ namespace AnalizBibl
                     break;
                 default:
                     res = false;
-                    throw new Exception("SpawnCase! SpC");
+                    throw new Exception($"Ожидались case или ключевое слово 'end', лексема {current}, SpawnCases");
             }
             return res;
         }
@@ -443,7 +479,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидался id! Assig");
+                throw new Exception($"Ожидался идентификатор, лексема {current}, Assignment");
             }
             if(allWords[current].word == "=")
             {
@@ -451,7 +487,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("Ожидался '='! Assig");
+                throw new Exception($"Ожидался '=' или вы неправильно ввели ключевое слово, лексема {current}, Assignment");
             }
             Expr();
 
@@ -648,7 +684,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("id! Iden");
+                throw new Exception($"Ожидался идентификатор, лексема {current}, Identifier");
             }
 
             if (SpawnIdOne())
@@ -657,7 +693,7 @@ namespace AnalizBibl
             }
             else
             {
-                throw new Exception("idSpawn! Iden");
+                throw new Exception($"Ожидались идентификаторы или объявление типа переменной, лексема {current}, Identifier");
             }
 
             return res;
@@ -676,11 +712,11 @@ namespace AnalizBibl
                     }
                     else
                     {
-                        throw new Exception("id! IdenSpawnOne");
+                        throw new Exception($"Ожидался идентификатор, лексема {current}, SpawnIdOne");
                     }
                     if (!SpawnIdTwo())
                     {
-                        throw new Exception("idSpTwo! IdenSpawnOne");
+                        throw new Exception($"Ожидалось перечисление идентификаторов, лексема {current}, SpawnIdOne");
                     }
                     
                     break;
@@ -688,8 +724,7 @@ namespace AnalizBibl
                     res = true;
                     break;
                 default:
-                    res = false;
-                    break;
+                    throw new Exception($"Ожидались ',' или 'as', лексема {current}, SpawnIdOne");
             }
 
             return res;
@@ -703,7 +738,7 @@ namespace AnalizBibl
                 case ",":
                     if (!SpawnIdOne())
                     {
-                        throw new Exception("idSpOne! IdenSpawnTwo");
+                        throw new Exception($"Ожидалось перечисление переменной, лексема {current}, SpawnIdTwo");
                     }
                     break;
                 case "as":
@@ -711,7 +746,7 @@ namespace AnalizBibl
                     break;
                 default:
                     res = false;
-                    break;
+                    throw new Exception($"Ожидались ',' или 'as', лексема {current}, SpawnIdTwo");
             }
 
             return res;
@@ -735,7 +770,7 @@ namespace AnalizBibl
                     res = true;
                     break;
                 default:
-                    throw new Exception("int or ! typeId");
+                    throw new Exception($"Ожидалось объявление типа, лексема {current}, TypeId");
             }
 
             return res;
