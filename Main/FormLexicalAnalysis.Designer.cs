@@ -70,37 +70,38 @@
             // 
             this.bLoad.Location = new System.Drawing.Point(448, 12);
             this.bLoad.Name = "bLoad";
-            this.bLoad.Size = new System.Drawing.Size(91, 33);
+            this.bLoad.Size = new System.Drawing.Size(137, 56);
             this.bLoad.TabIndex = 1;
-            this.bLoad.Text = "Load";
+            this.bLoad.Text = "Загрузить текст программы";
             this.bLoad.UseVisualStyleBackColor = true;
             this.bLoad.Click += new System.EventHandler(this.bLoad_Click);
             // 
             // bCrTb
             // 
-            this.bCrTb.Location = new System.Drawing.Point(688, 12);
+            this.bCrTb.Location = new System.Drawing.Point(741, 12);
             this.bCrTb.Name = "bCrTb";
-            this.bCrTb.Size = new System.Drawing.Size(100, 33);
+            this.bCrTb.Size = new System.Drawing.Size(140, 56);
             this.bCrTb.TabIndex = 2;
-            this.bCrTb.Text = "CreateTables";
+            this.bCrTb.Text = "Анализ синтаксический";
             this.bCrTb.UseVisualStyleBackColor = true;
             this.bCrTb.Click += new System.EventHandler(this.bCrTb_Click);
             // 
             // richTextBox1
             // 
+            this.richTextBox1.AcceptsTab = true;
             this.richTextBox1.Location = new System.Drawing.Point(448, 74);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(340, 364);
+            this.richTextBox1.Size = new System.Drawing.Size(433, 364);
             this.richTextBox1.TabIndex = 3;
             this.richTextBox1.Text = "";
             // 
             // bOperate
             // 
-            this.bOperate.Location = new System.Drawing.Point(574, 12);
+            this.bOperate.Location = new System.Drawing.Point(591, 12);
             this.bOperate.Name = "bOperate";
-            this.bOperate.Size = new System.Drawing.Size(91, 33);
+            this.bOperate.Size = new System.Drawing.Size(144, 56);
             this.bOperate.TabIndex = 4;
-            this.bOperate.Text = "Анализ";
+            this.bOperate.Text = "Анализ лексический";
             this.bOperate.UseVisualStyleBackColor = true;
             this.bOperate.Click += new System.EventHandler(this.bOperate_Click);
             // 
@@ -108,17 +109,18 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // FormlexicalAnalysis
+            // FormLexicalAnalysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(941, 450);
             this.Controls.Add(this.bOperate);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.bCrTb);
             this.Controls.Add(this.bLoad);
             this.Controls.Add(this.dataGridView1);
-            this.Name = "FormlexicalAnalysis";
+            this.Name = "FormLexicalAnalysis";
             this.Text = "Лексический анализатор";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

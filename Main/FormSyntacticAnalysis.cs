@@ -72,8 +72,13 @@ namespace Main
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                
                 int curr = validate.Current;
-                lRes.Text = "'" + allWords[curr].word + "' " + ex.Message.ToString();
+                try
+                {
+                    lRes.Text = "'" + allWords[curr].word + "' " + ex.Message.ToString();
+                }
+                catch { lRes.Text = "'" + allWords[curr - 1].word + "' " + ex.Message.ToString(); }
             }
             //if (validate.Program())
             //{

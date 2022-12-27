@@ -337,7 +337,9 @@ namespace AnalizBibl
                         if (!(IsDigit(sym) || IsSpecSym(sym) || sym == "."))
                         {
                             noError = false;
+                            
                             buff = "";
+                            throw new Exception("Идентификатор не должен начинаться с цифры!");
                             return;
                         }
                         else if (IsSpecSym(sym))
@@ -395,6 +397,10 @@ namespace AnalizBibl
                             if (buff.Length >= maxleng || sym == ".")
                             {
                                 noError = false;
+                                if(buff.Length >= maxleng)
+                                {
+                                    throw new Exception("Длина идентификатора должна быть не более 8!");
+                                }
                                 return;
                             }
                             buff += sym;
